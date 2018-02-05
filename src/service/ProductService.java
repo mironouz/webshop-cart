@@ -1,20 +1,35 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+
+import model.Cart;
+import model.Item;
+
 @Path("products")
 public class ProductService {
+
+	static Cart c;
 
     public ProductService() {
 
     }
 
+    static {
+    	Item a = new Item("bread", 20, true);
+    	Item b = new Item("butter", 30, false);
+    	c = new Cart(new ArrayList<Item>(Arrays.asList(a,b)));
+    }
+
     @GET
-    @Produces("text/plain")
-    public String getXml() {
-        return "hello";
+    @Produces({"application/xml", "application/json"})
+    public Cart getXml() {
+        return c;
     }
 
 }
