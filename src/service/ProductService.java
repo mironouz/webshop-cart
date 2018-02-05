@@ -1,8 +1,7 @@
 package service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -23,7 +22,7 @@ public class ProductService {
     static {
     	Item a = new Item("bread", 20, true);
     	Item b = new Item("butter", 30, false);
-    	c = new Cart(new ArrayList<Item>(Arrays.asList(a,b)));
+    	c = new Cart(new CopyOnWriteArrayList<Item>(Arrays.asList(a,b)));
     }
 
     @GET
