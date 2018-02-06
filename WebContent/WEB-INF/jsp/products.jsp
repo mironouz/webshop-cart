@@ -9,9 +9,13 @@
 </head>
 <body>
 	<h1>All products: </h1>
-	<c:forEach var="item" items="${it.cart}">
-		${item} <br/>
-	</c:forEach>
-
+	<table border="1">
+		<c:forEach var="item" items="${it.cart}">
+			<tr>
+			<td>${item}</td>
+			<td><a href="products/${item.id}">show item</a></td>
+			</tr>
+		</c:forEach>
+	</table>
 </body>
 </html>
