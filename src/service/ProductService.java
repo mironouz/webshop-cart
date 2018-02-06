@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 
@@ -27,8 +28,16 @@ public class ProductService {
 
     @GET
     @Produces({"application/xml", "application/json"})
-    public Cart getXml() {
+    public Cart getCart() {
         return c;
     }
+
+    @Path("{id}")
+    @GET
+    @Produces({"application/xml", "application/json"})
+	public Item getItem(@PathParam("id") int id) {
+    	return c.findById(id);
+    }
+
 
 }

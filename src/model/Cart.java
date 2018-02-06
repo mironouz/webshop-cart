@@ -15,8 +15,17 @@ import lombok.NoArgsConstructor;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Cart {
 
-	@XmlElementWrapper
+	@XmlElementWrapper(name="items")
 	@XmlElement(name="item")
 	private List<Item> cart;
+
+	public Item findById(int id) {
+		for(Item i : cart) {
+			if (i.getId() == id) {
+				return i;
+			}
+		}
+		return null;
+	}
 
 }

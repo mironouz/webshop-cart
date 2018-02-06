@@ -2,15 +2,15 @@ package model;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@XmlType(propOrder = {"name", "price", "in_stock"})
+@XmlRootElement
+@XmlType(propOrder = {"id", "name", "price", "in_stock"})
 public class Item {
 
 	private static AtomicInteger counter = new AtomicInteger(0);
