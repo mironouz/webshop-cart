@@ -2,6 +2,9 @@ package model;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import lombok.Data;
@@ -10,12 +13,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @XmlRootElement
-@XmlType(propOrder = {"id", "name", "price", "in_stock"})
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"name", "price", "in_stock"})
 public class Item {
 
 	private static AtomicInteger counter = new AtomicInteger(0);
 
-	private int id;
+	@XmlAttribute private int id;
 	private String name;
 	private int price;
 	private boolean in_stock;
