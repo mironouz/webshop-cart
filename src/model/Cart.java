@@ -28,4 +28,14 @@ public class Cart {
 		return null;
 	}
 
+	public boolean deleteItemById(int id) {
+		for(Item i : cart) {
+			if (i.getId() == id) {
+				cart.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

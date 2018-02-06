@@ -2,6 +2,8 @@ package service;
 
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -37,6 +39,16 @@ public class ProductService {
     @Produces({"application/xml", "application/json"})
 	public Item getItem(@PathParam("id") int id) {
     	return c.findById(id);
+    }
+
+    @Path("{id}")
+    @DELETE
+    @Produces({"text/plain"})
+	public String deleteItem(@PathParam("id") int id) {
+    	if(c.deleteItemById(id)) {
+    		return "item " + id + " successfuly deleted";
+    	}
+    	return "item " + id + " was not found";
     }
 
 
