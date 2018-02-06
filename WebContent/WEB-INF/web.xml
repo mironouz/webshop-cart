@@ -10,6 +10,14 @@
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>app.App</param-value>
         </init-param>
+        <init-param>
+    		<param-name>jersey.config.server.provider.classnames</param-name>
+    		<param-value>org.glassfish.jersey.server.mvc.jsp.JspMvcFeature</param-value>
+		</init-param>
+        <init-param>
+        	<param-name>jersey.config.server.mvc.templateBasePath.jsp</param-name>
+        	<param-value>/WEB-INF/jsp</param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>Jersey Web Application</servlet-name>

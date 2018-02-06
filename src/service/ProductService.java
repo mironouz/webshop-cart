@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.glassfish.jersey.server.mvc.Viewable;
 
 import model.Cart;
 import model.Item;
@@ -32,6 +33,12 @@ public class ProductService {
     @Produces({"application/xml", "application/json"})
     public Cart getCart() {
         return c;
+    }
+
+    @GET
+    @Produces("text/html")
+    public Viewable getCartHtml() {
+    	return new Viewable("/products.jsp", c);
     }
 
     @Path("{id}")
