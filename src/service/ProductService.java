@@ -49,6 +49,13 @@ public class ProductService {
     }
 
     @Path("{id}")
+    @GET
+    @Produces("text/html")
+    public Viewable getItemHtml(@PathParam("id") int id) {
+    	return new Viewable("/product.jsp", c.findById(id));
+    }
+
+    @Path("{id}")
     @DELETE
     @Produces({"text/plain"})
 	public String deleteItem(@PathParam("id") int id) {
