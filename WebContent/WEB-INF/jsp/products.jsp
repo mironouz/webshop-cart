@@ -5,17 +5,30 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>All products</title>
+<title>All items</title>
 </head>
 <body>
-	<h1>All products: </h1>
-	<table border="1">
-		<c:forEach var="item" items="${it.cart}">
-			<tr>
-			<td>${item}</td>
-			<td><a href="products/${item.id}">show item</a></td>
-			</tr>
-		</c:forEach>
-	</table>
+	<c:choose>
+		<c:when test="${it.cart.size() == 0}">
+			<h1>There is no items</h1>
+		</c:when>
+		<c:otherwise>
+			<h1>All items: </h1>
+			<table border="1">
+				<c:forEach var="item" items="${it.cart}">
+					<tr>
+					<td>${item}</td>
+					<td><a href="products/${item.id}">show item</a></td>
+					<!--  That is not good, just for testing DELETE requet -->
+					<!-- It doesn't work in all browsers -->
+					<td><a href="#" onClick="fetch('products/' + ${item.id}, {
+					    method: 'delete'
+					    }).then(function(response) {
+		    			location.reload() })">delete</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:otherwise>
+	</c:choose>
 </body>
 </html>

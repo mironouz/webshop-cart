@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Product ${it.id} info</title>
+<title>Item ${it.id} info</title>
 </head>
 <body>
 	<c:choose>
