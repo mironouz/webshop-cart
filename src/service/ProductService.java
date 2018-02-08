@@ -69,14 +69,13 @@ public class ProductService {
     }
 
     @POST
-    @Produces({"text/plain"})
-    public String createItem(@FormParam("name") String name,
-    						@FormParam("price") int price,
-    						@FormParam("in_stock") boolean in_stock) {
+    @Produces({"text/html"})
+    public Viewable createItem(@FormParam("name") String name,
+    						@FormParam("price") int price) {
     	List<Item> cart = c.getCart();
-    	cart.add(new Item(name, price, in_stock));
+    	cart.add(new Item(name, price, true));
     	c.setCart(cart);
-    	return "The item was created";
+    	return new Viewable("/products.jsp", c);
     }
 
 

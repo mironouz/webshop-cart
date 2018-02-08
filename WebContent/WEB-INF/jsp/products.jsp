@@ -30,5 +30,13 @@
 			</table>
 		</c:otherwise>
 	</c:choose>
+	<p>Create new item:</p>
+	<form action="products" method="post">
+		name
+		<input type="text" name="name" />
+		price
+		<input type="text" name="price" />
+		<input type="submit" value="create" />
+	</form>
 </body>
 </html>
