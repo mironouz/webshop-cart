@@ -1,5 +1,6 @@
 package service;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -11,6 +12,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Viewable;
 
@@ -69,13 +71,12 @@ public class ProductService {
     }
 
     @POST
-    @Produces({"text/html"})
-    public Viewable createItem(@FormParam("name") String name,
+    public Response createItem(@FormParam("name") String name,
     						@FormParam("price") int price) {
     	List<Item> cart = c.getCart();
     	cart.add(new Item(name, price, true));
     	c.setCart(cart);
-    	return new Viewable("/products.jsp", c);
+    	return Response.seeOther(URI.create("products")).build();
     }
 
 
