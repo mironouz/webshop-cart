@@ -1,10 +1,13 @@
 package service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -63,6 +66,17 @@ public class ProductService {
     		return "item " + id + " successfuly deleted";
     	}
     	return "item " + id + " was not found";
+    }
+
+    @POST
+    @Produces({"text/plain"})
+    public String createItem(@FormParam("name") String name,
+    						@FormParam("price") int price,
+    						@FormParam("in_stock") boolean in_stock) {
+    	List<Item> cart = c.getCart();
+    	cart.add(new Item(name, price, in_stock));
+    	c.setCart(cart);
+    	return "The item was created";
     }
 
 
