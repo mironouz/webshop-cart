@@ -9,6 +9,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -70,14 +71,30 @@ public class ProductService {
     	return "item " + id + " was not found";
     }
 
+
     @POST
     public Response createItem(@FormParam("name") String name,
     						@FormParam("price") int price) {
     	List<Item> cart = c.getCart();
     	cart.add(new Item(name, price, true));
     	c.setCart(cart);
+    	// I am not sure that it is a good idea to call get request from post in REST
+    	// maybe it is better to do in client, for example in JS code
     	return Response.seeOther(URI.create("products")).build();
     }
 
+    @Path("{id}")
+    @PUT
+    public String updateItem(@FormParam("name") String name,
+    						@FormParam("price") int price,
+    						@PathParam("id") int id) {
 
+    	if(c.deleteItemById(id)) {
+    		List<Item> cart = c.getCart();
+    		cart.add(new Item(name, price, true));
+    		c.setCart(cart);
+    		return "item " + id + " was successfuly updated";
+    	}
+    	return "item " + id + " was not found";
+	}
 }
