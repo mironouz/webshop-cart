@@ -61,6 +61,15 @@ public class ProductService {
     	return new Viewable("/product.jsp", c.findById(id));
     }
 
+    @DELETE
+    @Produces({"text/plain"})
+	public String clearCart() {
+    	List<Item> cart = c.getCart();
+    	cart.clear();
+    	c.setCart(cart);
+    	return "The cart was cleared";
+    }
+
     @Path("{id}")
     @DELETE
     @Produces({"text/plain"})
@@ -70,7 +79,6 @@ public class ProductService {
     	}
     	return "item " + id + " was not found";
     }
-
 
     @POST
     public Response createItem(@FormParam("name") String name,

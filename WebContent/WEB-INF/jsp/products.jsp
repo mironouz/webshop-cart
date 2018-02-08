@@ -14,6 +14,9 @@
 		</c:when>
 		<c:otherwise>
 			<h1>All items: </h1>
+			<p><a href="" onClick="fetch('products', {
+					    method: 'delete'
+					    })">delete all</a></p>
 			<table border="1">
 				<c:forEach var="item" items="${it.cart}">
 					<tr>
@@ -21,10 +24,9 @@
 					<td><a href="products/${item.id}">show item</a></td>
 					<!--  That is not good, just for testing DELETE requet -->
 					<!-- It doesn't work in all browsers -->
-					<td><a href="#" onClick="fetch('products/' + ${item.id}, {
+					<td><a href="" onClick="fetch('products/' + ${item.id}, {
 					    method: 'delete'
-					    }).then(function(response) {
-		    			location.reload() })">delete</td>
+					    })">delete</a></td>
 					</tr>
 				</c:forEach>
 			</table>
