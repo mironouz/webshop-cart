@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Cart {
 
-	@XmlElementWrapper(name="items")
 	@XmlElement(name="item")
 	private List<Item> cart;
 
