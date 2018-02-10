@@ -9,4 +9,4 @@
 3. @DELETE __rest/products__
 4. @DELETE __rest/products/id__
 5. @POST __rest/products__ (with form parameters "name" and "price" or JSON/XML data)
-6. @PUT __rest/products/id__ (with form parameters "name" and "price")
+6. @PUT __rest/products/id__ (with form parameters "name" and "price" or JSON/XML data)
