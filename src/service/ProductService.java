@@ -105,7 +105,8 @@ public class ProductService {
 
     @Path("{id}")
     @PUT
-    public String updateItem(@FormParam("name") String name,
+    @Produces("text/plain")
+    public String updateItemFromForm(@FormParam("name") String name,
     						@FormParam("price") int price,
     						@PathParam("id") int id) {
 
@@ -117,4 +118,19 @@ public class ProductService {
     	}
     	return "item " + id + " was not found";
 	}
+
+    @Path("{id}")
+    @PUT
+    @Produces("text/plain")
+    @Consumes({"application/xml", "application/json"})
+    public String updateItem(Item i, @PathParam("id") int id) {
+    	Item item = c.findById(id);
+    	if(item != null) {
+    		item.setName(i.getName());
+    		item.setPrice(i.getPrice());
+    		item.setIn_stock(i.isIn_stock());
+    		return "item " + id + " was successfuly updated";
+    	}
+    	return "item " + id + " was not found";
+    }
 }
