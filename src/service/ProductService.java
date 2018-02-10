@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -62,7 +63,7 @@ public class ProductService {
     }
 
     @DELETE
-    @Produces({"text/plain"})
+    @Produces("text/plain")
 	public String clearCart() {
     	List<Item> cart = c.getCart();
     	cart.clear();
@@ -72,7 +73,7 @@ public class ProductService {
 
     @Path("{id}")
     @DELETE
-    @Produces({"text/plain"})
+    @Produces("text/plain")
 	public String deleteItem(@PathParam("id") int id) {
     	if(c.deleteItemById(id)) {
     		return "item " + id + " successfuly deleted";
@@ -81,7 +82,8 @@ public class ProductService {
     }
 
     @POST
-    public Response createItem(@FormParam("name") String name,
+    @Produces("text/html")
+    public Response createItemFromForm(@FormParam("name") String name,
     						@FormParam("price") int price) {
     	List<Item> cart = c.getCart();
     	cart.add(new Item(name, price, true));
@@ -89,6 +91,16 @@ public class ProductService {
     	// I am not sure that it is a good idea to call get request from post in REST
     	// maybe it is better to do in client, for example in JS code
     	return Response.seeOther(URI.create("products")).build();
+    }
+
+    @POST
+    @Produces("text/plain")
+    @Consumes({"application/xml", "application/json"})
+    public String createItem(Item item) {
+    	List<Item> cart = c.getCart();
+    	cart.add(new Item(item.getName(), item.getPrice(), item.isIn_stock()));
+    	c.setCart(cart);
+    	return "Item was succesfully created";
     }
 
     @Path("{id}")
