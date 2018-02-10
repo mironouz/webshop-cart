@@ -97,10 +97,10 @@ public class ProductService {
     						@FormParam("price") int price,
     						@PathParam("id") int id) {
 
-    	if(c.deleteItemById(id)) {
-    		List<Item> cart = c.getCart();
-    		cart.add(new Item(name, price, true));
-    		c.setCart(cart);
+    	Item item = c.findById(id);
+    	if(item != null) {
+    		item.setName(name);
+    		item.setPrice(price);
     		return "item " + id + " was successfuly updated";
     	}
     	return "item " + id + " was not found";
