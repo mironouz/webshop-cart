@@ -4,10 +4,13 @@ import java.util.Scanner;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.jersey.client.ClientConfig;
+
+import model.Item;
 
 public class Main {
 	public static void main(String[] args) {
@@ -37,6 +40,8 @@ public class Main {
 					  			break;
 				case "delete":	response = delete(target, path);
 					  			break;
+				case "post":	response = post(target, path, sc);
+								break;
 			}
 
 			System.out.println(response);
@@ -58,5 +63,18 @@ public class Main {
 				 request().
 				 accept("text/plain").
 				 delete(String.class);
+	}
+
+	private static String post(WebTarget target, String path, Scanner sc) {
+		System.out.println("Input name and price of item");
+		String[] tokens = sc.nextLine().split(" ");
+		String name = tokens[0];
+		int price = Integer.parseInt(tokens[1]);
+		Item item = new Item(name, price, true);
+		return target.path("rest").
+				 path(path).
+				 request().
+				 accept("text/plain").
+				 post(Entity.entity(item, "application/xml"), String.class);
 	}
 }
