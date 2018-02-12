@@ -26,13 +26,17 @@ public class Main {
 				case "xml": 	accept_type = "application/xml";
 								break;
 				case "html":	accept_type = "text/html";
+								break;
+				default:		accept_type = "json";
 			}
 			Client client = ClientBuilder.newClient(new ClientConfig());
 			WebTarget target = client.target(UriBuilder.fromUri("http://localhost:8080/webshop-cart").build());
 			String response = null;
 			switch(method) {
-				case "get": response = get(target, path, accept_type);
-					  		break;
+				case "get": 	response = get(target, path, accept_type);
+					  			break;
+				case "delete":	response = delete(target, path);
+					  			break;
 			}
 
 			System.out.println(response);
@@ -46,5 +50,13 @@ public class Main {
 				 request().
 				 accept(accept_type).
 				 get(String.class);
+	}
+
+	private static String delete(WebTarget target, String path) {
+		return target.path("rest").
+				 path(path).
+				 request().
+				 accept("text/plain").
+				 delete(String.class);
 	}
 }
