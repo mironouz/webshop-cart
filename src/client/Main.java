@@ -42,6 +42,9 @@ public class Main {
 					  			break;
 				case "post":	response = post(target, path, sc);
 								break;
+				case "put": 	response = put(target, path, sc);
+								break;
+				default:		response = "Please, choose the correct http method!";
 			}
 
 			System.out.println(response);
@@ -76,5 +79,18 @@ public class Main {
 				 request().
 				 accept("text/plain").
 				 post(Entity.entity(item, "application/xml"), String.class);
+	}
+
+	private static String put(WebTarget target, String path, Scanner sc) {
+		System.out.println("Input name and price of item");
+		String[] tokens = sc.nextLine().split(" ");
+		String name = tokens[0];
+		int price = Integer.parseInt(tokens[1]);
+		Item item = new Item(name, price, true);
+		return target.path("rest").
+				 path(path).
+				 request().
+				 accept("text/plain").
+				 put(Entity.entity(item, "application/xml"), String.class);
 	}
 }
