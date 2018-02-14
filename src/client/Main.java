@@ -18,6 +18,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.NotAllowedException;
@@ -146,6 +152,9 @@ public class Main {
 		if(accept_type.equals("application/xml")) {
 			return formatXML(input);
 		}
+		else if(accept_type.equals("application/json")) {
+			return formatJSON(input);
+		}
 		return input;
 	}
 
@@ -173,5 +182,12 @@ public class Main {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String formatJSON(String input) {
+    	JsonParser parser = new JsonParser();
+        JsonObject json = parser.parse(input).getAsJsonObject();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(json);
     }
 }
