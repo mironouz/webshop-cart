@@ -82,37 +82,33 @@ public class Main {
 	}
 
 	private static String post(WebTarget target, String path, Scanner sc, String accept_type) {
-		Object payload = null;
-		if(accept_type.equalsIgnoreCase("application/json") || accept_type.equalsIgnoreCase("application/xml")) {
-			System.out.println("Please, input " + accept_type + " string");
-			payload = sc.nextLine();
-		}
-		else {
-			payload = createItem(sc);
+		Object payload = getPayload(sc, accept_type);
+		if(!accept_type.equalsIgnoreCase("application/json") || !accept_type.equalsIgnoreCase("application/xml")) {
 			accept_type = "application/json";
 		}
-		return getBase(target, path, "text/plain").post(Entity.entity(payload, "application/xml"), String.class);
+		return getBase(target, path, "text/plain").post(Entity.entity(payload, accept_type), String.class);
 	}
 
 	private static String put(WebTarget target, String path, Scanner sc, String accept_type) {
-		Object payload = null;
-		if(accept_type.equalsIgnoreCase("application/json") || accept_type.equalsIgnoreCase("application/xml")) {
-			System.out.println("Please, input " + accept_type + " string");
-			payload = sc.nextLine();
-		}
-		else {
-			payload = createItem(sc);
+		Object payload = getPayload(sc, accept_type);
+		if(!accept_type.equalsIgnoreCase("application/json") || !accept_type.equalsIgnoreCase("application/xml")) {
 			accept_type = "application/json";
 		}
 		return getBase(target, path, "text/plain").put(Entity.entity(payload, accept_type), String.class);
 	}
 
-	private static Item createItem(Scanner sc) {
-		System.out.println("Input name and price of item");
-		String[] tokens = sc.nextLine().split(" ");
-		String name = tokens[0];
-		int price = Integer.parseInt(tokens[1]);
-		return new Item(name, price, true);
+	private static Object getPayload(Scanner sc, String accept_type) {
+		if(accept_type.equalsIgnoreCase("application/json") || accept_type.equalsIgnoreCase("application/xml")) {
+			System.out.println("Please, input " + accept_type + " string");
+			return sc.nextLine();
+		}
+		else {
+			System.out.println("Input name and price of item");
+			String[] tokens = sc.nextLine().split(" ");
+			String name = tokens[0];
+			int price = Integer.parseInt(tokens[1]);
+			return new Item(name, price, true);
+		}
 	}
 
 	private static Builder getBase(WebTarget target, String path, String accept_type) {
