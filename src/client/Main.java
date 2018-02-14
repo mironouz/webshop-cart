@@ -16,7 +16,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		try(Scanner sc = new Scanner(System.in)) {
-			String server = "http://localhost:8080/webshop-cart";
+			String server = "http://java-webshop.herokuapp.com";
 			System.out.println("Enter http method, path and accept type(example: get products json)");
 			while(true) {
 				String[] tokens = sc.nextLine().split(" ");
@@ -64,9 +64,9 @@ public class Main {
 				  			break;
 			case "delete":	response = delete(target, path);
 				  			break;
-			case "post":	response = post(target, path, sc);
+			case "post":	response = post(target, path, sc, accept_type);
 							break;
-			case "put": 	response = put(target, path, sc);
+			case "put": 	response = put(target, path, sc, accept_type);
 							break;
 			default:		response = "Please, choose the correct http method!";
 		}
@@ -78,17 +78,33 @@ public class Main {
 	}
 
 	private static String delete(WebTarget target, String path) {
-		return getBase(target, path, "text/plain").get(String.class);
+		return getBase(target, path, "text/plain").delete(String.class);
 	}
 
-	private static String post(WebTarget target, String path, Scanner sc) {
-		Item item = createItem(sc);
-		return getBase(target, path, "text/plain").post(Entity.entity(item, "application/xml"), String.class);
+	private static String post(WebTarget target, String path, Scanner sc, String accept_type) {
+		Object payload = null;
+		if(accept_type.equalsIgnoreCase("application/json") || accept_type.equalsIgnoreCase("application/xml")) {
+			System.out.println("Please, input " + accept_type + " string");
+			payload = sc.nextLine();
+		}
+		else {
+			payload = createItem(sc);
+			accept_type = "application/json";
+		}
+		return getBase(target, path, "text/plain").post(Entity.entity(payload, "application/xml"), String.class);
 	}
 
-	private static String put(WebTarget target, String path, Scanner sc) {
-		Item item = createItem(sc);
-		return getBase(target, path, "text/plain").put(Entity.entity(item, "application/xml"), String.class);
+	private static String put(WebTarget target, String path, Scanner sc, String accept_type) {
+		Object payload = null;
+		if(accept_type.equalsIgnoreCase("application/json") || accept_type.equalsIgnoreCase("application/xml")) {
+			System.out.println("Please, input " + accept_type + " string");
+			payload = sc.nextLine();
+		}
+		else {
+			payload = createItem(sc);
+			accept_type = "application/json";
+		}
+		return getBase(target, path, "text/plain").put(Entity.entity(payload, accept_type), String.class);
 	}
 
 	private static Item createItem(Scanner sc) {
