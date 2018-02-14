@@ -1,5 +1,7 @@
 package client;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Scanner;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -7,6 +9,15 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.NotAllowedException;
@@ -73,6 +84,7 @@ public class Main {
 		String response = null;
 		switch(method) {
 			case "get": 	response = get(target, path, accept_type);
+							response = format(response, accept_type);
 				  			break;
 			case "delete":	response = delete(target, path);
 				  			break;
@@ -129,4 +141,37 @@ public class Main {
 				 request().
 				 accept(accept_type);
 	}
+
+	public static String format(String input, String accept_type) {
+		if(accept_type.equals("application/xml")) {
+			return formatXML(input);
+		}
+		return input;
+	}
+
+	public static String formatXML(String input) {
+        try {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
+            StreamResult result = new StreamResult(new StringWriter());
+            DOMSource source = new DOMSource(parseXml(input));
+            transformer.transform(source, result);
+            return result.getWriter().toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return input;
+        }
+    }
+
+    private static Document parseXml(String input) {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(input));
+            return db.parse(is);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
