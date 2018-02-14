@@ -10,6 +10,9 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.NotAllowedException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ProcessingException;
 import model.Item;
 
 public class Main {
@@ -28,6 +31,9 @@ public class Main {
 						String response = sendRequest(tokens, server, sc);
 						System.out.println(response);
 					}
+					catch(BadRequestException e) {
+						System.out.println("Error 400: bad request");
+					}
 					catch(NotFoundException e) {
 						System.out.println("Error 404: not found");
 					}
@@ -36,6 +42,12 @@ public class Main {
 					}
 					catch(NotAcceptableException e) {
 						System.out.println("Error 406: not acceptable");
+					}
+					catch(InternalServerErrorException e) {
+						System.out.println("Error 500: internal server error");
+					}
+					catch(ProcessingException e) {
+						System.out.println("Service is not available!");
 					}
 				}
 			}
@@ -54,7 +66,7 @@ public class Main {
 							break;
 			case "html":	accept_type = "text/html";
 							break;
-			default:		accept_type = "json";
+			default:		accept_type = "application/json";
 		}
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(UriBuilder.fromUri(server).build());
@@ -83,7 +95,7 @@ public class Main {
 
 	private static String post(WebTarget target, String path, Scanner sc, String accept_type) {
 		Object payload = getPayload(sc, accept_type);
-		if(!accept_type.equalsIgnoreCase("application/json") || !accept_type.equalsIgnoreCase("application/xml")) {
+		if(accept_type.equals("text/html")) {
 			accept_type = "application/json";
 		}
 		return getBase(target, path, "text/plain").post(Entity.entity(payload, accept_type), String.class);
@@ -91,15 +103,15 @@ public class Main {
 
 	private static String put(WebTarget target, String path, Scanner sc, String accept_type) {
 		Object payload = getPayload(sc, accept_type);
-		if(!accept_type.equalsIgnoreCase("application/json") || !accept_type.equalsIgnoreCase("application/xml")) {
+		if(accept_type.equals("text/html")) {
 			accept_type = "application/json";
 		}
 		return getBase(target, path, "text/plain").put(Entity.entity(payload, accept_type), String.class);
 	}
 
 	private static Object getPayload(Scanner sc, String accept_type) {
-		if(accept_type.equalsIgnoreCase("application/json") || accept_type.equalsIgnoreCase("application/xml")) {
-			System.out.println("Please, input " + accept_type + " string");
+		if(accept_type.equals("application/json") || accept_type.equals("application/xml")) {
+			System.out.println("Please, input " + accept_type + " string in one line");
 			return sc.nextLine();
 		}
 		else {
