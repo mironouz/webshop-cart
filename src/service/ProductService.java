@@ -48,14 +48,14 @@ public class ProductService {
     	return new Viewable("/products.jsp", c);
     }
 
-    @Path("{id}")
+    @Path("{id : \\d+}")
     @GET
     @Produces({"application/xml", "application/json"})
 	public Item getItem(@PathParam("id") int id) {
     	return c.findById(id);
     }
 
-    @Path("{id}")
+    @Path("{id : \\d+}")
     @GET
     @Produces("text/html")
     public Viewable getItemHtml(@PathParam("id") int id) {
@@ -71,7 +71,7 @@ public class ProductService {
     	return "The cart was cleared";
     }
 
-    @Path("{id}")
+    @Path("{id : \\d+}")
     @DELETE
     @Produces("text/plain")
 	public String deleteItem(@PathParam("id") int id) {
@@ -103,7 +103,7 @@ public class ProductService {
     	return "Item was succesfully created";
     }
 
-    @Path("{id}")
+    @Path("{id : \\d+}")
     @PUT
     @Produces("text/plain")
     public String updateItemFromForm(@FormParam("name") String name,
@@ -119,7 +119,7 @@ public class ProductService {
     	return "item " + id + " was not found";
 	}
 
-    @Path("{id}")
+    @Path("{id : \\d+}")
     @PUT
     @Produces("text/plain")
     @Consumes({"application/xml", "application/json"})
