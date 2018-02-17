@@ -24,7 +24,7 @@ import model.Item;
 @Path("products")
 public class ProductService {
 
-	static Cart c;
+	private static Cart c;
 
     public ProductService() {
 

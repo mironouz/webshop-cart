@@ -32,7 +32,7 @@ __Examples of JSON and XML data for POST and PUT requests:__
 
 Java console application is available in client package under src folder.
 It can be used to send requests and get responses in any format(HTML, JSON, XML).
-It reads the command from standard input which should be __http method path format__ form.
+It reads the command from standard input which should be __http-method path format__ form.
 
 Examples:
 * get products json
