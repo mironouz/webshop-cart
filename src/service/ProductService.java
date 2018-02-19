@@ -9,6 +9,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -38,47 +39,49 @@ public class ProductService {
 
     @GET
     @Produces({"application/xml", "application/json"})
-    public Cart getCart() {
-        return c;
+    public Response getCart() {
+        return Response.ok(c).build();
     }
 
     @GET
     @Produces("text/html")
-    public Viewable getCartHtml() {
-    	return new Viewable("/products.jsp", c);
+    public Response getCartHtml() {
+    	return Response.ok(new Viewable("/products.jsp", c)).build();
     }
 
     @Path("{id : \\d+}")
     @GET
     @Produces({"application/xml", "application/json"})
-	public Item getItem(@PathParam("id") int id) {
-    	return c.findById(id);
+	public Response getItem(@PathParam("id") int id) {
+    	Item item = c.findById(id);
+    	if(item == null) {
+    		throw new NotFoundException();
+    	}
+    	return Response.ok(item).build();
     }
 
     @Path("{id : \\d+}")
     @GET
     @Produces("text/html")
-    public Viewable getItemHtml(@PathParam("id") int id) {
-    	return new Viewable("/product.jsp", c.findById(id));
+    public Response getItemHtml(@PathParam("id") int id) {
+    	return Response.ok(new Viewable("/product.jsp", c.findById(id))).build();
     }
 
     @DELETE
-    @Produces("text/plain")
-	public String clearCart() {
+	public Response clearCart() {
     	List<Item> cart = c.getCart();
     	cart.clear();
     	c.setCart(cart);
-    	return "The cart was cleared";
+    	return Response.noContent().build();
     }
 
     @Path("{id : \\d+}")
     @DELETE
-    @Produces("text/plain")
-	public String deleteItem(@PathParam("id") int id) {
+	public Response deleteItem(@PathParam("id") int id) {
     	if(c.deleteItemById(id)) {
-    		return "item " + id + " successfuly deleted";
+    		Response.noContent().build();
     	}
-    	return "item " + id + " was not found";
+    	throw new NotFoundException();
     }
 
     @POST
@@ -94,19 +97,18 @@ public class ProductService {
     }
 
     @POST
-    @Produces("text/plain")
     @Consumes({"application/xml", "application/json"})
-    public String createItem(Item item) {
+    public Response createItem(Item item) {
     	List<Item> cart = c.getCart();
-    	cart.add(new Item(item.getName(), item.getPrice(), item.isIn_stock()));
+    	Item i = new Item(item.getName(), item.getPrice(), item.isIn_stock());
+    	cart.add(i);
     	c.setCart(cart);
-    	return "Item was succesfully created";
+    	return Response.created(URI.create("products/" + i.getId())).build();
     }
 
     @Path("{id : \\d+}")
     @PUT
-    @Produces("text/plain")
-    public String updateItemFromForm(@FormParam("name") String name,
+    public Response updateItemFromForm(@FormParam("name") String name,
     						@FormParam("price") int price,
     						@PathParam("id") int id) {
 
@@ -114,23 +116,22 @@ public class ProductService {
     	if(item != null) {
     		item.setName(name);
     		item.setPrice(price);
-    		return "item " + id + " was successfuly updated";
+    		Response.noContent().build();
     	}
-    	return "item " + id + " was not found";
+    	throw new NotFoundException();
 	}
 
     @Path("{id : \\d+}")
     @PUT
-    @Produces("text/plain")
     @Consumes({"application/xml", "application/json"})
-    public String updateItem(Item i, @PathParam("id") int id) {
+    public Response updateItem(Item i, @PathParam("id") int id) {
     	Item item = c.findById(id);
     	if(item != null) {
     		item.setName(i.getName());
     		item.setPrice(i.getPrice());
     		item.setIn_stock(i.isIn_stock());
-    		return "item " + id + " was successfuly updated";
+    		Response.noContent().build();
     	}
-    	return "item " + id + " was not found";
+    	throw new NotFoundException();
     }
 }
