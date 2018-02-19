@@ -79,7 +79,7 @@ public class ProductService {
     @DELETE
 	public Response deleteItem(@PathParam("id") int id) {
     	if(c.deleteItemById(id)) {
-    		Response.noContent().build();
+    		return Response.noContent().build();
     	}
     	throw new NotFoundException();
     }
@@ -116,7 +116,7 @@ public class ProductService {
     	if(item != null) {
     		item.setName(name);
     		item.setPrice(price);
-    		Response.noContent().build();
+    		return Response.noContent().build();
     	}
     	throw new NotFoundException();
 	}
@@ -130,7 +130,7 @@ public class ProductService {
     		item.setName(i.getName());
     		item.setPrice(i.getPrice());
     		item.setIn_stock(i.isIn_stock());
-    		Response.noContent().build();
+    		return Response.noContent().build();
     	}
     	throw new NotFoundException();
     }
