@@ -51,6 +51,7 @@
         <version>3.0.0</version>
         <configuration>
           <warSourceDirectory>WebContent</warSourceDirectory>
+          <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
         </configuration>
       </plugin>
     </plugins>
